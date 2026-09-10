@@ -399,7 +399,7 @@ foreach ($binRelDir in @("bin\hip", "bin\cuda", "bin\vulkan", "bin\cpu")) {
 
 if ($GpuType -eq "hip") {
     $BinDir = Join-Path $PSScriptRoot "bin\hip"
-    Download-Binary "llama-bin-win-hip-radeon-x64.zip" $BinDir
+    Download-Binary "llama-${ReleaseTag}-bin-win-hip-radeon-x64.zip" $BinDir
 } elseif ($GpuType -eq "cuda") {
     $BinDir = Join-Path $PSScriptRoot "bin\cuda"
     Download-Binary "llama-${ReleaseTag}-bin-win-cuda-${CudaTag}-x64.zip" $BinDir
@@ -419,12 +419,12 @@ if ($GpuType -eq "hip") {
     }
 } elseif ($GpuType -eq "vulkan") {
     $BinDir = Join-Path $PSScriptRoot "bin\vulkan"
-    Download-Binary "llama-bin-win-cpu-${WinArch}.zip" $BinDir "llama-cli.exe"
-    Download-Binary "llama-bin-win-vulkan-x64.zip" $BinDir "ggml-vulkan.dll"
+    Download-Binary "llama-${ReleaseTag}-bin-win-cpu-${WinArch}.zip" $BinDir "llama-cli.exe"
+    Download-Binary "llama-${ReleaseTag}-bin-win-vulkan-x64.zip" $BinDir "ggml-vulkan.dll"
 } else {
     # CPU fallback (arch-aware)
     $BinDir = Join-Path $PSScriptRoot "bin\cpu"
-    Download-Binary "llama-bin-win-cpu-${WinArch}.zip" $BinDir
+    Download-Binary "llama-${ReleaseTag}-bin-win-cpu-${WinArch}.zip" $BinDir
 }
 
 # Record the installed release so a future setup detects a version bump and
