@@ -4,7 +4,7 @@
 
 RTX 5070 Ti Laptop GPU (Blackwell, sm_120, 12 GB, driver 616.56) paired with a Core Ultra 9 275HX (8P+16E) and 32 GB DDR5, Windows 11. Prism release binaries `prism-b10685-7dffb15`, CUDA build, `-ngl 99 -fa 1`.
 
-Bonsai 2 27B decode on this card is bandwidth-bound at about 49 t/s with either packing. Prompt processing strongly prefers PQ2_0: 1134 t/s vs 527 t/s for PTQ1_0, a 2.15x gap.
+Bonsai 2 27B decode on this card is bandwidth-bound at about 49 t/s with either packing. Prompt processing strongly prefers PQ2_0: 1,135 t/s vs 527 t/s for PTQ1_0, a 2.15x gap.
 
 Headline numbers (llama-bench, 8 CPU threads, batch 1):
 
@@ -48,7 +48,7 @@ build: 7dffb158d (10685)
 llama-bench does not take `--kv-mean-center`, so this row is without the bias. At llama-bench's small depth the 4-bit cache costs almost nothing; the real tradeoff shows up at long context (next section).
 
 ```
-| model                          |       size |     params | backend    | ngl | threads |   fa |    kv-k |    kv-v |            test |                  t/s |
+| model                          |       size |     params | backend    | ngl | threads |    kv-k |    kv-v |   fa |            test |                  t/s |
 | ------------------------------ | ---------: | ---------: | ---------- | --: | ------: | ---: | ------: | ------: | --------------: | -------------------: |
 | qwen35 27B PTQ1_0 - 1.75 bpw ternary (group 128) |   5.53 GiB |    26.90 B | CUDA       |  99 |       8 |   q4_0 |   q4_0 |   1 |           pp512 |        525.68 ± 8.17 |
 | qwen35 27B PTQ1_0 - 1.75 bpw ternary (group 128) |   5.53 GiB |    26.90 B | CUDA       |  99 |       8 |   q4_0 |   q4_0 |   1 |           tg128 |         48.33 ± 0.16 |
