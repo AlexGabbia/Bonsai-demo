@@ -13,6 +13,7 @@ Sorted by decode speed (TG128). The 27B models come in two families: Bonsai (1-b
 | Ternary | NVIDIA L40S 48 GB | llama.cpp CUDA | 3,036 | 74.3 | ~150 (2.06x, 2.4x math) | [link](ternary-bonsai/cuda-l40s-linux.md) |
 | Ternary | NVIDIA RTX 4070 Ti SUPER 16 GB | llama.cpp CUDA (Windows) | 1,717 | 69.6 | | [link](ternary-bonsai/cuda-rtx4070tisuper-windows.md) |
 | Bonsai (1-bit) | Apple M5 Max 48 GB | llama.cpp Metal | 796 | 63.9 | slower on this HW | [link](bonsai/metal-m5-max-48gb-macos.md) |
+| Bonsai 2 (ternary) | NVIDIA RTX 5070 Ti Laptop 12 GB | llama.cpp CUDA (Windows) | 1,135 PQ2_0 / 527 PTQ1_0 | 49.0 | | [link](bonsai2/cuda-rtx5070ti-laptop-windows.md) |
 | Ternary | NVIDIA RTX A5000 24 GB | llama.cpp CUDA | 1,036 | 48.2 | | [link](ternary-bonsai/cuda-rtxa5000-ubuntu.md) |
 | Ternary | Apple M5 Max 48 GB | llama.cpp Metal | 816 | 45.8 | ~1.2x code/math only | [link](ternary-bonsai/metal-m5-max-48gb-macos.md) |
 | Bonsai (1-bit) | NVIDIA DGX Spark (GB10) | llama.cpp CUDA | 1,024 | 45.4 | ~96.1 (2.21x, code) | [link](bonsai/cuda-gb10-27b-linux.md) |
