@@ -11,6 +11,8 @@ Benchmark results submitted by the community running
 |------|----------|---------|------------:|------------:|---------|
 | `PTQ1_0` | NVIDIA RTX 4090 24 GB | llama.cpp CUDA (Windows) | 1,597 | 86.0 | [link](cuda-rtx4090-windows.md) |
 | `PQ2_0` | NVIDIA RTX 4090 24 GB | llama.cpp CUDA (Windows) | 3,285 | 84.9 | [link](cuda-rtx4090-windows.md) |
+| `PQ2_0` (community MTP file, plain inference) | NVIDIA RTX 5070 Ti Laptop 12 GB | llama.cpp CUDA (Windows) | 1,135 | 49.0 | [link](cuda-rtx5070ti-laptop-windows.md) |
+| `PTQ1_0` | NVIDIA RTX 5070 Ti Laptop 12 GB | llama.cpp CUDA (Windows) | 527 | 49.0 | [link](cuda-rtx5070ti-laptop-windows.md) |
 
 ## How to Submit
 
