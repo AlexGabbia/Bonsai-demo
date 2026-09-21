@@ -1,44 +1,39 @@
-# Bonsai 2 (ternary)
+# Bonsai 2 Community Benchmarks
 
-Results for the **Bonsai 2** family (27B and smaller, as they get released). Bonsai 2 27B is
-built on Qwen3.8-27B and keeps ternary weights end to end; it is the current generation, separate
-from the older `bonsai/` (1-bit) and `ternary-bonsai/` (first-generation ternary) families.
-
-## Formats
-
-| File | ggml type | Runs on |
-|---|---|---|
-| `Ternary-Bonsai-2-27B-PTQ1_0.gguf` (5.53 GiB) | `PTQ1_0` (143, dense trits, group 128) | PrismML fork only |
-| `Ternary-Bonsai-2-27B-PQ2_0.gguf` (7.21 GiB) | `PQ2_0` (142, 2-bit slots, group 128) | PrismML fork only |
-| `Ternary-Bonsai-2-27B-Q2_0-prism-fork-required.gguf` (dev repo, 7.10 GiB) | `Q2_0` (42, group 64) | loads on mainline llama.cpp but produces garbage until the activation transform lands upstream; correct on the fork |
-
-The two production files live in [prism-ml/Ternary-Bonsai-2-27B-gguf](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf);
-the dev file is in [prism-ml/Ternary-Bonsai-2-27B-gguf-dev](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf-dev).
+Benchmark results submitted by the community running
+[Bonsai 2 27B](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf) on their own hardware.
 
 ## Results
 
-Sorted by decode speed (TG128). Format column shows the packing used.
+### Bonsai-2-27B
 
-| Hardware | Backend | Format | PP512 (t/s) | TG128 (t/s) | TG with MTP (t/s) | Details |
-|---|---|---:|---:|---:|---:|---|
-| NVIDIA RTX 5070 Ti Laptop 12 GB | llama.cpp CUDA (Windows) | PQ2_0 | 1,135 | 49.0 | 70-75 (code) | [link](cuda-rtx5070ti-laptop-windows.md) |
-| NVIDIA RTX 5070 Ti Laptop 12 GB | llama.cpp CUDA (Windows) | PTQ1_0 | 527 | 49.0 | | [link](cuda-rtx5070ti-laptop-windows.md) |
-| NVIDIA RTX 5070 Ti Laptop 12 GB | llama.cpp CPU (Windows) | PTQ1_0 | (see entry) | 4.9 | | [link](cuda-rtx5070ti-laptop-windows.md) |
+| Band | Hardware | Backend | PP512 (t/s) | TG128 (t/s) | Details |
+|------|----------|---------|------------:|------------:|---------|
+| `PTQ1_0` | NVIDIA RTX 4090 24 GB | llama.cpp CUDA (Windows) | 1,597 | 86.0 | [link](cuda-rtx4090-windows.md) |
+| `PQ2_0` | NVIDIA RTX 4090 24 GB | llama.cpp CUDA (Windows) | 3,285 | 84.9 | [link](cuda-rtx4090-windows.md) |
 
-## Submitting
+## How to Submit
 
-Same flow as the other families, with a couple of Bonsai 2 specific notes:
+1. Run `./setup.sh` on macOS/Linux or `.\setup.ps1` in Windows PowerShell.
+   The default family is Bonsai 2; setup downloads `PQ2_0` and the required fork binaries.
+   For `PTQ1_0`, download it from the model repository above and pass its path to
+   `llama-bench -m` (`BONSAI_MODEL` selects a size, not a file path).
+   The development [Q2_0 file](https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf-dev/blob/main/Ternary-Bonsai-2-27B-Q2_0-prism-fork-required.gguf) is also welcome for benchmarking via `-m`.
+   It uses the official llama.cpp `Q2_0` format but **currently requires our fork**
+   for Bonsai 2's Hadamard transform support. Upstream support is pending our PRs.
+2. Copy [TEMPLATE-llama-cpp.md](TEMPLATE-llama-cpp.md) to
+   `<backend>-<hardware>-<os>.md` here (lowercase, dashes). Keep tested formats in
+   the same machine report, with separate commands and raw results for each.
+3. Include the exact model filename, binary release or commit, hardware, OS,
+   driver/backend version, and benchmark command. `PQ2_0`, `PTQ1_0`, and development `Q2_0` results are welcome;
+   one is enough if that is what you tested. Note any skipped or unsupported runs.
+4. Add a row per tested packing to the table above and the
+   [Bonsai 2 table in the main index](../README.md#bonsai-2-27b), then open a PR.
 
-- `setup.sh` defaults to `BONSAI_FAMILY=bonsai2` (Bonsai 2 27B, `PQ2_0`). To get the second packing run
-  `hf download prism-ml/Ternary-Bonsai-2-27B-gguf Ternary-Bonsai-2-27B-PTQ1_0.gguf --local-dir models`, and for
-  the mainline-format file see the `-dev` repo above.
-- Both production packings need the PrismML fork binaries; mainline llama.cpp rejects the types.
-- Report which packing you used. `PQ2_0` is faster at prompt processing, `PTQ1_0` is smaller and is the one that
-  fits long contexts on 12 GB cards.
-- If you measured speculative decoding, say which path: the embedded MTP head (`--spec-type draft-mtp` with a
-  file that contains the MTP layer, or a separate `-md` drafter) or a DSpark/DFlash drafter. Note that MTP forces
-  a single server slot (`-np 1`).
-- Long-context numbers are welcome: the 4-bit KV cache with a calibrated `--kv-mean-center` bias is what makes
-  128K fit on 12 GB.
+Use pp512/tg128 for the summary tables. Preserve raw output (including variation)
+in the report. Keep different builds or settings labeled separately.
 
-Open a PR with your file in this folder and a row in this table (and in the root index if you like).
+MLX submissions are also welcome in this folder. Identify the model, runtime versions,
+harness, and prompt/generation lengths. Only put matching pp512/tg128 measurements
+in those columns. Keep server, long-context, speculative decoding, and vision or
+quality checks in separate labeled sections, with their commands and workloads.
